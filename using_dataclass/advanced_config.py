@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields, field, asdict
 import json, yaml
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional
 
 @dataclass
 class GPUConfig:
@@ -62,5 +62,5 @@ if __name__ == "__main__":
     print(config.help())
     print(config.help("model_name_or_path"))
 
-    # config_dict = asdict(config)
-    # print(config_dict["do_sample"])
+    config_dict = asdict(config)
+    print(config_dict["do_sample"])
