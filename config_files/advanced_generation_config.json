@@ -1,0 +1,19 @@
+{
+  "model_type": "gpt2",
+  "model_name_or_path": "gpt2",
+  "cached_dir": "/home/rohola/cached_models",
+  "padding_text": "",
+  "max_length": 50,
+  "temperature": 1.0,
+  "top_k": 0,
+  "top_p": 0.9,
+  "stop_token": "",
+  "num_beams": 1,
+  "do_sample": true,
+  "created_at": "Jun 1 2005  1:33PM",
+  "gpu_config":
+      {
+        "cuda": true,
+        "seed": 46
+      }
+}
