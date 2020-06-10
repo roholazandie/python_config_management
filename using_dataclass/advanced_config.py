@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields, field, asdict
 import json, yaml
+import argparse
 from datetime import datetime
 from typing import Optional
 
@@ -22,7 +23,7 @@ class TextGenerationConfig:
     do_sample: bool
     created_at: datetime
     gpu_config: GPUConfig
-    padding_text: Optional[str] = field(default="", metadata={"help": "the character for padding the text"})
+    padding_text: str#Optional[str] = field(default="ff", metadata={"help": "the character for padding the text"})
     num_beams: Optional[int] = field(default=3, metadata={"help": "number of beams in beam search"})
 
     @classmethod
@@ -34,6 +35,20 @@ class TextGenerationConfig:
     def from_yaml(cls, yaml_file):
         config_yaml = yaml.load(open(yaml_file), yaml.FullLoader)
         return cls(**config_yaml)
+
+    def to_argparse(self, **kwargs):
+        parser = argparse.ArgumentParser(description=self.__doc__)
+        for attr, f in zip(self.__dict__, fields(self)):
+            value = self.__dict__[attr]
+            value_or_class = f.type
+            if f.metadata:
+                help = f.metadata['help']
+                parser.add_argument("--" + str(attr.replace('_', '-')), default=value, type=value_or_class, help=help)
+            else:
+                parser.add_argument("--" + str(attr.replace('_', '-')), default=value, type=value_or_class)
+
+        arg = parser.parse_args()
+        return arg
 
     def __post_init__(self):
         if type(self.created_at) is str:
@@ -64,3 +79,6 @@ if __name__ == "__main__":
 
     config_dict = asdict(config)
     print(config_dict["do_sample"])
+
+    args = config.to_argparse()
+    print(args.stop_token)
